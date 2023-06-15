@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -12,7 +11,12 @@ import ForgotPassword_EnterEmail from './src/screens/auth/ForgotPassword/ForgotP
 import ForgotPassword_EnterVerificationCode from './src/screens/auth/ForgotPassword/ForgotPassword_EnterVerificationCode';
 import ForgotPassword_ChoosePassword from './src/screens/auth/ForgotPassword/ForgotPassword_ChoosePassword';
 import ForgotPassword_AccountRecovered from './src/screens/auth/ForgotPassword/ForgotPassword_AccountRecovered';
-import Home from './src/screens/home/Home';
+import MainPage from './src/screens/mainpage/MainPage';
+import AllChats from './src/screens/chatsection/AllChats';
+import SearchUserPage from './src/screens/mainpage/SearchUserPage';
+import NotificationPage from './src/screens/mainpage/NotificationPage';
+import MyUserProfile from './src/screens/Profile/MyUserProfile'
+import Settings1 from './src/screens/settings/Settings1';
 
 const Stack = createNativeStackNavigator();
 
@@ -38,8 +42,28 @@ export default function App() {
         <Stack.Screen name="ForgotPassword_ChoosePassword" component={ForgotPassword_ChoosePassword} />
         <Stack.Screen name="ForgotPassword_AccountRecovered" component={ForgotPassword_AccountRecovered} />
 
-        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name="MainPage" component={MainPage} />
+        <Stack.Screen name="AllChats" component={AllChats}
+          options={{
+          animation:'slide_from_left'
+        }}/>
+        <Stack.Screen name="SearchUserPage" component={SearchUserPage}
+          options={{
+            animation:'slide_from_bottom'
+          }} />
         
+          <Stack.Screen name="NotificationPage" component={NotificationPage}
+          />
+        
+        <Stack.Screen name="MyUserProfile" component={MyUserProfile}
+          options={{
+            animation:'slide_from_left'
+          }} />
+        <Stack.Screen name="Settings1" component={Settings1}
+          options={{
+            animation:'slide_from_left'
+          }} />
+
       </Stack.Navigator>
     </NavigationContainer>
   );

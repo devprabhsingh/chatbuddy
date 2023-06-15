@@ -7,10 +7,9 @@ module.exports = {
         justifyContent:'center'
     },
     logo1: {
-        width:'70%',
         height: 70,
         resizeMode: 'contain',
-        marginBottom:70
+        marginBottom:20
     },
     hr80: {
         width: '80%',
@@ -35,7 +34,6 @@ module.exports = {
         fontSize: 30,
     },
     logo2: {
-        // width: 200,
         height: 30,
         resizeMode: 'contain',
         // backgroundColor: 'white',
