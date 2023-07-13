@@ -17,6 +17,10 @@ import SearchUserPage from './src/screens/mainpage/SearchUserPage';
 import NotificationPage from './src/screens/mainpage/NotificationPage';
 import MyUserProfile from './src/screens/Profile/MyUserProfile'
 import Settings1 from './src/screens/settings/Settings1';
+import ChangePassword from './src/screens/settings/ChangePassword';
+import EditProfile from './src/screens/settings/EditProfile';
+import ChangeUsername from './src/screens/settings/ChangeUsername';
+import ChangeDescription from './src/screens/settings/ChangeDescription';
 
 const Stack = createNativeStackNavigator();
 
@@ -63,7 +67,18 @@ export default function App() {
           options={{
             animation:'slide_from_left'
           }} />
-
+      <Stack.Screen name="ChangePassword" component={ChangePassword}
+          options={{
+            animation:'slide_from_left'
+          }} />
+         <Stack.Screen name="EditProfile" component={EditProfile}
+          options={{
+            animation:'slide_from_left'
+          }} />
+         <Stack.Screen name="ChangeUsername" component={ChangeUsername}/>
+         
+         <Stack.Screen name="ChangeDescription" component={ChangeDescription}/>
+          
       </Stack.Navigator>
     </NavigationContainer>
   );

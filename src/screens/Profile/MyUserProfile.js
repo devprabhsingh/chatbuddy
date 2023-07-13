@@ -1,98 +1,105 @@
-import { ScrollView, StatusBar, StyleSheet, Text, View,Image } from 'react-native'
-import React from 'react'
+import { ScrollView, StatusBar, StyleSheet, Text, View,Image,ActivityIndicator } from 'react-native'
+import React, { useEffect } from 'react'
 import BottomNavBar from '../../components/BottomNavBar'
 import TopNavBar from '../../components/TopNavBar'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const MyUserProfile = ({ navigation }) => {
+
+  const [data, setUserdata] = React.useState({})
+  const [loading, setLoading] = React.useState(true)
   
-  const data = {
-    username: 'Prabhjot',
-    followers: 1134,
-    following: 347,
-    description: 'I am a fullstack developer and I love coding',
-    profile_image: 'https://picsum.photos/500/500',
-    posts: [
-      {
-        id: 1,
-        post_image:'https://picsum.photos/400/400'
-      },
-      {
-        id: 2,
-        post_image:'https://picsum.photos/300/300'
-      },
-      {
-        id: 3,
-        post_image:'https://picsum.photos/440/440'
-      },
-      {
-        id: 4,
-        post_image:'https://picsum.photos/470/470'
-      },
-      {
-        id: 5,
-        post_image:'https://picsum.photos/390/390'
-      },
-      {
-        id: 6,
-        post_image:'https://picsum.photos/410/410'
-      },
-      {
-        id: 7,
-        post_image:'https://picsum.photos/405/410'
-      },
-      {
-        id: 8,
-        post_image:'https://picsum.photos/410/430'
-      },
-    ]
-  }
-  return (
-    <View style={styles.container}>
-      <StatusBar />
-      <TopNavBar navigation={navigation} page="MyUserProfile"/>
-      <BottomNavBar navigation={navigation} page="MyUserProfile" />
-      <ScrollView>
-        <View style={styles.c1}>
-          <Image source={{ uri: data.profile_image }} style={styles.profilepic} />
-          <Text style={styles.txt}>{data.username}</Text>
+  const loaddata = async () => {
 
-          <View style={styles.c11}>
-            <View style={styles.c111}>
-              <Text style={styles.txt1}>Followers</Text>
-              <Text style={styles.txt2}>{data.followers}</Text>
-            </View>
-            <View style={styles.vr1}></View>
-            <View style={styles.c111}>
-            <Text style={styles.txt1}>Following</Text>
-              <Text style={styles.txt2}>{data.following}</Text>
-            </View>
-            <View style={styles.vr1}></View>
-            <View style={styles.c111}>
-            <Text style={styles.txt1}>Posts</Text>
-              <Text style={styles.txt2}>{data.posts.length}</Text>
-            </View>
-          </View>
-
-          <Text style={styles.description}>{data.description}</Text>
-        </View>
-
-
-        <View style={styles.c1}>
-          <Text style={styles.txt}>Your Posts</Text>
-          <View style={styles.c13}>
-            {
-              data.posts.map(
-                (item, index) => {
-                  return (
-                    <Image key={index} source={{uri:item.post_image}} style={styles.postpic} />
-                  )
-                }
-              )
+    AsyncStorage.getItem('user')
+      .then(async (value) => {
+        fetch('http://10.0.0.51:3000/userData', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + JSON.parse(value).token
+          }
+        })
+          .then(res => res.json()).then(data => {
+            if (data.msg == 'User found') {
+              setUserdata(data.user)
+              setLoading(false)
             }
+            else {
+              alert('Login Again')
+              navigation.navigate('Login')
+            }
+          })
+          .catch(err => {
+            navigation.navigate('Login')
+          })
+      })
+      .catch(err => {
+        navigation.navigate('Login')
+      })
+  }
+  useEffect(() => {
+    loaddata() 
+  }, [])
+  
+  
+  return (
+  
+  <View style={styles.container}>
+    <StatusBar />
+    <TopNavBar navigation={navigation} page="MyUserProfile" />
+      <BottomNavBar navigation={navigation} page="MyUserProfile" />
+      {loading ?
+        <ActivityIndicator />
+        :
+      
+      
+        <ScrollView>
+          <View style={styles.c1}>
+            {data.hasOwnProperty('profile_image') ?
+              <Image source={{ uri: data.profile_image }} style={styles.profilepic} /> :
+              ''}
+            <Text style={styles.txt}>{data.username}</Text>
+
+            <View style={styles.c11}>
+              <View style={styles.c111}>
+                <Text style={styles.txt1}>Followers</Text>
+                <Text style={styles.txt2}>{data.followers.length}</Text>
+              </View>
+              <View style={styles.vr1}></View>
+              <View style={styles.c111}>
+                <Text style={styles.txt1}>Following</Text>
+                <Text style={styles.txt2}>{data.following.length}</Text>
+              </View>
+              <View style={styles.vr1}></View>
+              <View style={styles.c111}>
+                <Text style={styles.txt1}>Posts</Text>
+                <Text style={styles.txt2}>{data.posts.length}</Text>
+              </View>
+            </View>
+
+            <Text style={styles.description}>{data.description}</Text>
           </View>
-        </View>
-      </ScrollView>
-    </View>
+
+
+          <View style={styles.c1}>
+            <Text style={styles.txt}>Your Posts</Text>
+            <View style={styles.c13}>
+              {data.posts ?
+                data.posts.map(
+                  (item, index) => {
+                    return (
+                      <Image key={index} source={{ uri: item.post_image }} style={styles.postpic} />
+                    )
+                  }
+                )
+                : ''}
+            </View>
+          </View>
+        </ScrollView>
+      }
+  </View>
+
   )
 }
 

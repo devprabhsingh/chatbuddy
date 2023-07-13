@@ -25,10 +25,11 @@ const ForgotPassword_EnterEmail = ({ navigation }) => {
       })
         .then(res => res.json())
         .then(data => {
+          console.log(data)
           setLoading(false)
           if (data.msg == 'Email sent') {
             navigation.navigate('ForgotPassword_EnterVerificationCode',{vCode:data.vCode,email})
-          } else if(data.msg=='Invalid credentials'){
+          } else if(data.msg=='Invalid Credentials'){
             alert(data.msg)
           }
       }).catch(err=>alert(err))

@@ -4,10 +4,11 @@ import logo from '../../../../assets/logo.png'
 import { containerFull,hr80,logo1 } from '../../../commonCSS/pagecss'
 import { formInput,formHead, formbtn, formTextLinkCenter } from '../../../commonCSS/formcss';
 import { formTextLinkRight } from '../../../commonCSS/formcss';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = ({ navigation }) => {
-    const [email,setEmail] = useState('')
-    const [password,setPassword] = useState('')
+    const [email,setEmail] = useState('iprabh@gmail.com')
+    const [password,setPassword] = useState('prabh2002')
     const [loading, setLoading] = useState(false)
     
     const handleLogin = () => {
@@ -24,11 +25,12 @@ const Login = ({ navigation }) => {
                     email,password
                 })
             }).then(res => res.json())
-                .then(data => { 
+                .then(async data => { 
                     setLoading(false)
                     if (data.error) {  
                         alert(data.error)
                     } else if (data.msg == 'Login Success') {
+                        await AsyncStorage.setItem('user', JSON.stringify(data))
                         navigation.navigate('MainPage',{data})
                     }
                 })
